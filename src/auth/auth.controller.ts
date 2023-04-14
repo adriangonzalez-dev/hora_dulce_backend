@@ -6,11 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { getUser } from './decorators/get-user.decorator';
+import { Auth } from './entities/auth.entity';
+import { ValidRole } from './decorators/Valid-role.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -29,6 +35,15 @@ export class AuthController {
   @Get()
   findAll() {
     return this.authService.findAll();
+  }
+
+  @Get('private')
+  @UseGuards(AuthGuard())
+  private(@ValidRole('user_role') @getUser() user: Auth) {
+    return {
+      user,
+      message: 'This is a private message!',
+    };
   }
 
   @Get(':id')

@@ -6,10 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { ValidRole } from 'src/auth/decorators/Valid-role.decorator';
+import { Auth } from 'src/auth/entities/auth.entity';
 
 @Controller('products')
 export class ProductsController {
@@ -21,7 +25,8 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
+  @UseGuards(AuthGuard())
+  findAll(@ValidRole('user_role') user: Auth) {
     return this.productsService.findAll();
   }
 

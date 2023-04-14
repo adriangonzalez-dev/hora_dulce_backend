@@ -13,6 +13,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { compareHash, generateHash } from './helpers/bcryptGenerator';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,9 @@ export class AuthService {
       if (user) {
         throw new BadRequestException('El usuario ya existe!');
       }
+      createAuthDto.email = createAuthDto.email.toLowerCase();
+      createAuthDto.username = createAuthDto.username.toLowerCase();
+
       user = new this.authModel(createAuthDto);
       user.password = generateHash(user.password);
 
@@ -72,7 +76,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas!');
     }
 
-    const token = await this.jwtService.signAsync({ id: user._id });
+    const token = this.getJwtToken({ id: user._id });
 
     return {
       user: {
@@ -94,5 +98,9 @@ export class AuthService {
 
   remove(id: number) {
     return 'this endpoint is not implemented yet!';
+  }
+
+  private getJwtToken(payload: JwtPayload) {
+    return this.jwtService.sign(payload);
   }
 }

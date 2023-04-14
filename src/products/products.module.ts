@@ -3,6 +3,7 @@ import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './entities/product.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [ProductsController],
@@ -14,6 +15,7 @@ import { Product, ProductSchema } from './entities/product.entity';
         schema: ProductSchema,
       },
     ]),
+    AuthModule,
   ],
 })
 export class ProductsModule {}
