@@ -12,27 +12,30 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ValidRole } from 'src/auth/decorators/Valid-role.decorator';
 import { Auth } from 'src/auth/entities/auth.entity';
+import { getUser } from 'src/auth/decorators/get-user.decorator';
+import { ValidRole } from 'src/auth/decorators/Valid-role.decorator';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  @UseGuards(AuthGuard())
+  async create(@Body() createProductDto: CreateProductDto) {
+    const product = await this.productsService.create(createProductDto);
+    return product;
   }
 
   @Get()
   @UseGuards(AuthGuard())
-  findAll(@ValidRole('user_role') user: Auth) {
+  findAll() {
     return this.productsService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+    return this.productsService.findOne(id);
   }
 
   @Patch(':id')
@@ -42,6 +45,6 @@ export class ProductsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+    return this.productsService.remove(id);
   }
 }

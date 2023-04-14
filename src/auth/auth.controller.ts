@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -39,7 +38,7 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard())
-  private(@ValidRole('user_role') @getUser() user: Auth) {
+  private(@getUser() @ValidRole('user_role') user: Auth) {
     return {
       user,
       message: 'This is a private message!',

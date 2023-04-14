@@ -1,4 +1,11 @@
-import { IsString, IsNumber, Min, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  Min,
+  IsBoolean,
+  IsMongoId,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -15,5 +22,9 @@ export class CreateProductDto {
   outstanding: boolean;
 
   @IsString()
+  @IsOptional()
   image: string;
+
+  @IsMongoId()
+  createdBy: string;
 }
