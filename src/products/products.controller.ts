@@ -35,7 +35,6 @@ export class ProductsController {
   }
 
   @Get()
-  @UseGuards(AuthGuard())
   findAll() {
     return this.productsService.findAll();
   }
@@ -46,7 +45,9 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard())
   update(
+    @getUser() @ValidRole('admin_role') user: Auth,
     @Param('id', IsMongoIdPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
   ) {
@@ -54,7 +55,11 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  remove(@Param('id', IsMongoIdPipe) id: string) {
+  @UseGuards(AuthGuard())
+  remove(
+    @ValidRole('admin_role') user: Auth,
+    @Param('id', IsMongoIdPipe) id: string,
+  ) {
     return this.productsService.remove(id);
   }
 }
