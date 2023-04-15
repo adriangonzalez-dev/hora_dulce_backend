@@ -3,14 +3,14 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  /*   Patch, */
   Param,
-  Delete,
+  /*   Delete, */
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+/* import { UpdateAuthDto } from './dto/update-auth.dto'; */
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { getUser } from './decorators/get-user.decorator';
