@@ -17,49 +17,55 @@ export class ProductsService {
     private readonly productModel: Model<Product>,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
-    try {
-      const product = new this.productModel(createProductDto);
-      await product.save();
-      return product;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException('Contacte con el administrador!');
+  async create(id: string, createProductDto: CreateProductDto) {
+    let product = await this.productModel.findOne({
+      title: createProductDto.title.toLocaleLowerCase(),
+    });
+    if (product) {
+      throw new BadRequestException('El producto ya existe!');
     }
+    createProductDto.title = createProductDto.title.toLocaleLowerCase();
+    product = new this.productModel(createProductDto);
+    product.createdBy = id;
+    await product.save();
+    return product;
   }
 
   async findAll() {
-    const products = await this.productModel.find();
-    return products;
+    try {
+      const products = await this.productModel.find();
+      return products;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Contacte con el administrador!');
+    }
   }
 
   async findOne(id: string) {
-    try {
-      const product = await this.productModel.findById(id);
-      if (!product) {
-        throw new NotFoundException('Producto no encontrado!');
-      }
-      return product;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException('Contacte con el administrador!');
+    const product = await this.productModel.findById(id);
+    if (!product) {
+      throw new NotFoundException('Producto no encontrado!');
     }
+    return product;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
-    try {
-      const product = await this.findOne(id);
-      product.updateOne(updateProductDto, { new: true });
-      const updatedProduct = await product.save();
+    const product = await this.findOne(id);
+    const { modifiedCount } = await product.updateOne(updateProductDto, {
+      new: true,
+    });
 
-      return updatedProduct;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException('Contacte con el administrador!');
+    if (modifiedCount === 0) {
+      throw new BadRequestException('Producto no actualizado!');
     }
+
+    const updatedProduct = await this.findOne(id);
+
+    return updatedProduct;
   }
 
   remove(id: string) {
-    return `This action removes a #${id} product`;
+    const removedProduct = this.productModel.findByIdAndDelete(id);
+    return removedProduct;
   }
 }

@@ -24,7 +24,4 @@ export class CreateProductDto {
   @IsString()
   @IsOptional()
   image: string;
-
-  @IsMongoId()
-  createdBy: string;
 }
