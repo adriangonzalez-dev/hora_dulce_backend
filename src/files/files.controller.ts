@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   Delete,
   Param,
@@ -13,7 +12,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { fileFilter } from './helpers/fileFilter.helper';
 import { fileNamer } from './helpers/fileNamer.helper';
 import { diskStorage } from 'multer';
-import { v2 as cloudinary, ConfigOptions } from 'cloudinary';
 import { AuthGuard } from '@nestjs/passport';
 import { getUser } from 'src/auth/decorators/get-user.decorator';
 import { ValidRole } from 'src/auth/decorators/Valid-role.decorator';

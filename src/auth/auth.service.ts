@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+/* import { UpdateAuthDto } from './dto/update-auth.dto'; */
 import { Model } from 'mongoose';
 import { Auth } from './entities/auth.entity';
 import { InjectModel } from '@nestjs/mongoose';
@@ -92,13 +92,13 @@ export class AuthService {
     };
   }
 
-  update(id: string, updateAuthDto: UpdateAuthDto) {
+  /*   update(id: string, updateAuthDto: UpdateAuthDto) {
     return 'this endpoint is not implemented yet!';
   }
 
   remove(id: number) {
     return 'this endpoint is not implemented yet!';
-  }
+  } */
 
   private getJwtToken(payload: JwtPayload) {
     return this.jwtService.sign(payload);
