@@ -91,6 +91,25 @@ export class AuthService {
       message: 'Login correcto!',
     };
   }
+  async relogin(token: string) {
+    const { id } = this.verifyToken(token);
+    const user = await this.findOne(id);
+
+    const newToken = this.getJwtToken({ id: user._id });
+
+    return {
+      user: {
+        name: user.username,
+        email: user.email,
+        role: user.role,
+        _id: user._id,
+        avatar: user.avatar,
+      },
+      token: newToken,
+      expiresIn: 3600,
+      message: 'Login correcto!',
+    };
+  }
 
   /*   update(id: string, updateAuthDto: UpdateAuthDto) {
     return 'this endpoint is not implemented yet!';
@@ -102,5 +121,9 @@ export class AuthService {
 
   private getJwtToken(payload: JwtPayload) {
     return this.jwtService.sign(payload);
+  }
+
+  private verifyToken(token: string) {
+    return this.jwtService.verify(token);
   }
 }
