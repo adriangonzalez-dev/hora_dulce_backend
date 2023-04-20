@@ -40,7 +40,6 @@ export class FilesController {
 
   @Delete('product/:image')
   async deleteProductImage(@Param('image') image: string) {
-    const public_id = image.split('/').pop().split('.')[0];
-    return await this.filesService.deleteImage(public_id);
+    return await this.filesService.deleteImage(`products/${image}`);
   }
 }

@@ -54,14 +54,4 @@ export class AuthController {
   reLogin(@Param('token') token: string) {
     return this.authService.relogin(token);
   }
-
-  /*   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  } */
 }
